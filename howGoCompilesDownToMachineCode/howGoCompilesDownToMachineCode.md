@@ -17,7 +17,7 @@ Each token is represented by its position, type, and raw text in Go. Go even all
 
 The program will look like this:
 
-
+![alt text](https://github.com/ArmineKhachatryanDev/Go/blob/master/howGoCompilesDownToMachineCode/scanner.png)
 
 ```go
 package main
