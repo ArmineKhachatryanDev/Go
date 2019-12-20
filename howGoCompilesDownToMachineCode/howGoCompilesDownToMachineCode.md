@@ -20,7 +20,7 @@ The program will look like this:
 
 ![alt text](https://github.com/ArmineKhachatryanDev/Go/blob/master/howGoCompilesDownToMachineCode/scanner.png)
 
-## CODE
+## Code
 ```go
 package main
 
@@ -65,3 +65,115 @@ func main() {
 
 
 Here we can see what the Go parser uses when it compiles a program. What we can also see is that the scanner adds semicolons where those would usually be placed in other programming languages such as C. This explains why Go does not need semicolons: they are placed intelligently by the scanner.
+
+After the source code has been scanned, it will be passed to the parser. The parser is a phase of the compiler that converts the tokens into an Abstract Syntax Tree (AST). The AST is a structured representation of the source code. In the AST we will be able to see the program structure, such as functions and constant declarations.
+
+Go has again provided us with packages to parse the program and view the AST: go/parser and go/ast. We can use them like this to print the full AST:
+
+![alt text](https://github.com/ArmineKhachatryanDev/Go/blob/master/howGoCompilesDownToMachineCode/Parser.png)
+
+##Code
+```go
+
+package main
+
+import (
+  "go/ast"
+  "go/parser"
+  "go/token"
+  "log"
+)
+
+func main() {
+  src := []byte(`package main
+import "fmt"
+func main() {
+  fmt.Println("Hello, world!")
+}
+`)
+
+  fset := token.NewFileSet()
+
+  file, err := parser.ParseFile(fset, "", src, 0)
+  if err != nil {
+     log.Fatal(err)
+  }
+
+  ast.Print(fset, file)
+}
+```
+Output:
+     0  *ast.File {
+     1  .  Package: 1:1
+     2  .  Name: *ast.Ident {
+     3  .  .  NamePos: 1:9
+     4  .  .  Name: "main"
+     5  .  }
+     6  .  Decls: []ast.Decl (len = 2) {
+     7  .  .  0: *ast.GenDecl {
+     8  .  .  .  TokPos: 3:1
+     9  .  .  .  Tok: import
+    10  .  .  .  Lparen: -
+    11  .  .  .  Specs: []ast.Spec (len = 1) {
+    12  .  .  .  .  0: *ast.ImportSpec {
+    13  .  .  .  .  .  Path: *ast.BasicLit {
+    14  .  .  .  .  .  .  ValuePos: 3:8
+    15  .  .  .  .  .  .  Kind: STRING
+    16  .  .  .  .  .  .  Value: "\"fmt\""
+    17  .  .  .  .  .  }
+    18  .  .  .  .  .  EndPos: -
+    19  .  .  .  .  }
+    20  .  .  .  }
+    21  .  .  .  Rparen: -
+    22  .  .  }
+    23  .  .  1: *ast.FuncDecl {
+    24  .  .  .  Name: *ast.Ident {
+    25  .  .  .  .  NamePos: 5:6
+    26  .  .  .  .  Name: "main"
+    27  .  .  .  .  Obj: *ast.Object {
+    28  .  .  .  .  .  Kind: func
+    29  .  .  .  .  .  Name: "main"
+    30  .  .  .  .  .  Decl: *(obj @ 23)
+    31  .  .  .  .  }
+    32  .  .  .  }
+    33  .  .  .  Type: *ast.FuncType {
+    34  .  .  .  .  Func: 5:1
+    35  .  .  .  .  Params: *ast.FieldList {
+    36  .  .  .  .  .  Opening: 5:10
+    37  .  .  .  .  .  Closing: 5:11
+    38  .  .  .  .  }
+    39  .  .  .  }
+    40  .  .  .  Body: *ast.BlockStmt {
+    41  .  .  .  .  Lbrace: 5:13
+    42  .  .  .  .  List: []ast.Stmt (len = 1) {
+    43  .  .  .  .  .  0: *ast.ExprStmt {
+    44  .  .  .  .  .  .  X: *ast.CallExpr {
+    45  .  .  .  .  .  .  .  Fun: *ast.SelectorExpr {
+    46  .  .  .  .  .  .  .  .  X: *ast.Ident {
+    47  .  .  .  .  .  .  .  .  .  NamePos: 6:2
+    48  .  .  .  .  .  .  .  .  .  Name: "fmt"
+    49  .  .  .  .  .  .  .  .  }
+    50  .  .  .  .  .  .  .  .  Sel: *ast.Ident {
+    51  .  .  .  .  .  .  .  .  .  NamePos: 6:6
+    52  .  .  .  .  .  .  .  .  .  Name: "Println"
+    53  .  .  .  .  .  .  .  .  }
+    54  .  .  .  .  .  .  .  }
+    55  .  .  .  .  .  .  .  Lparen: 6:13
+    56  .  .  .  .  .  .  .  Args: []ast.Expr (len = 1) {
+    57  .  .  .  .  .  .  .  .  0: *ast.BasicLit {
+    58  .  .  .  .  .  .  .  .  .  ValuePos: 6:14
+    59  .  .  .  .  .  .  .  .  .  Kind: STRING
+    60  .  .  .  .  .  .  .  .  .  Value: "\"Hello, world!\""
+    61  .  .  .  .  .  .  .  .  }
+    62  .  .  .  .  .  .  .  }
+    63  .  .  .  .  .  .  .  Ellipsis: -
+    64  .  .  .  .  .  .  .  Rparen: 6:29
+    65  .  .  .  .  .  .  }
+    66  .  .  .  .  .  }
+    67  .  .  .  .  }
+    68  .  .  .  .  Rbrace: 7:1
+    69  .  .  .  }
+    70  .  .  }
+    71  .  }
+    ..  .  .. // Left out for brevity
+    83  }
