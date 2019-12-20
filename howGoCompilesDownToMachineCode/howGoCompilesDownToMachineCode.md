@@ -17,8 +17,10 @@ Each token is represented by its position, type, and raw text in Go. Go even all
 
 The program will look like this:
 
+
 ![alt text](https://github.com/ArmineKhachatryanDev/Go/blob/master/howGoCompilesDownToMachineCode/scanner.png)
 
+## CODE
 ```go
 package main
 
@@ -51,32 +53,15 @@ func main() {
         break
      }
   }
-
+```
 
   We will create our source code string and initialize the scanner.Scanner struct which will scan our source code. We call Scan() as many times as we can and print the token’s position, type, and literal string until we reach the End of File (EOF) marker.
 
 
   When we run the program, it will print the following:
 
- 
-1:1   package "package"
-1:9   IDENT   "main"
-1:13  ;       "\n"
-2:1   import  "import"
-2:8   STRING  "\"fmt\""
-2:13  ;       "\n"
-3:1   func    "func"
-3:6   IDENT   "main"
-3:10  (       ""
-3:11  )       ""
-3:13  {       ""
-4:3   IDENT   "fmt"
-4:6   .       ""
-4:7   IDENT   "Println"
-4:14  (       ""
-4:15  STRING  "\"Hello, world!\""
-4:30  )       ""
-4:31  ;       "\n"
-5:1   }       ""
-5:2   ;       "\n"
-5:3   EOF     ""
+  ![alt text](https://github.com/ArmineKhachatryanDev/Go/blob/master/howGoCompilesDownToMachineCode/scannerResult.png)
+
+
+
+Here we can see what the Go parser uses when it compiles a program. What we can also see is that the scanner adds semicolons where those would usually be placed in other programming languages such as C. This explains why Go does not need semicolons: they are placed intelligently by the scanner.
