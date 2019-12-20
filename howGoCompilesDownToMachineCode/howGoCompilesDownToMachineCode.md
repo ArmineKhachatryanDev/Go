@@ -101,7 +101,7 @@ func main() {
 
   ast.Print(fset, file)
 }
-```
+
 Output:
      0  *ast.File {
      1  .  Package: 1:1
