@@ -4,7 +4,6 @@
 
 * **Master the Type System of Go**
   * What is Go Doc?
-  * The lectures under "Write a Library Package".
   * Every Go type has a zero value
   * What is a blank identifier?
   * Let's declare a couple of variables!
